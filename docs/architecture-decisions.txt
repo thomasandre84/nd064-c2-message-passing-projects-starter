@@ -1,0 +1,14 @@
+Architecture Decisions
+1. REST
+- To get the connections between persons and locations, a separate Controller with a separate ReST Endpoint will be created.
+The Frontend eill use the ReSt Endpoint to retrieve the relevant data.
+ReST provides a format, which can easily be adapted by other Clients, also the mobile devices, to send and receive data.
+
+2. gRPC
+- The internal communication between the microservices to fetch/get data, is done with gRPC.
+The data can be transfered in a binary format, between the services, which will lead to less network traffic and in most cases to faster communication.
+The format can be defined in a proto file and the generated classes can be used for client und server.
+
+3. Kafka
+- Since a huge amount of data with location data is expected by the mobile, a DSP will be put in between to be able to handle the incoming data.
+Kafka will enable to put the data into a queue/topic and the services/consuzmers can read these data and store/persist them in the database.
