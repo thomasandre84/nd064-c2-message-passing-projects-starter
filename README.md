@@ -18,6 +18,8 @@ To do so, ***you will refactor this application into a microservice architecture
 * [Vagrant](https://www.vagrantup.com/) - Tool for managing virtual deployed environments
 * [VirtualBox](https://www.virtualbox.org/) - Hypervisor allowing you to run multiple operating systems
 * [K3s](https://k3s.io/) - Lightweight distribution of K8s to easily develop against a local cluster
+* [Kafka](https://kafka.apache.org/) - Distributed Streaming Platform
+* [Strimzi](https://strimzi.io/) - Kafka for Kubernetes
 
 ## Running the app
 The project has been set up such that you should be able to have the project up and running with Kubernetes.
@@ -79,9 +81,11 @@ Afterwards, you can test that `kubectl` works by running a command like `kubectl
 1. `kubectl apply -f deployment/db-configmap.yaml` - Set up environment variables for the pods
 2. `kubectl apply -f deployment/db-secret.yaml` - Set up secrets for the pods
 3. `kubectl apply -f deployment/postgres.yaml` - Set up a Postgres database running PostGIS
-4. `kubectl apply -f deployment/udaconnect-api.yaml` - Set up the service and deployment for the API
-5. `kubectl apply -f deployment/udaconnect-app.yaml` - Set up the service and deployment for the web app
-6. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
+4. `kubectl create -f 'https://strimzi.io/install/latest?namespace=default'` - Set up Strimzi Cluster Operator for Kafka
+5. `kubectl apply -f deployment/kafka.yaml` - Set up Kafka
+6. `kubectl apply -f deployment/udaconnect-api.yaml` - Set up the service and deployment for the API
+7. `kubectl apply -f deployment/udaconnect-app.yaml` - Set up the service and deployment for the web app
+8. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
 
 Manually applying each of the individual `yaml` files is cumbersome but going through each step provides some context on the content of the starter project. In practice, we would have reduced the number of steps by running the command against a directory to apply of the contents: `kubectl apply -f deployment/`.
 
