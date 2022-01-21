@@ -1,7 +1,7 @@
 Architecture Decisions
 1. REST
 - To get the connections between persons and locations, a separate Controller with a separate ReST Endpoint will be created.
-The Frontend eill use the ReSt Endpoint to retrieve the relevant data.
+The Frontend eill use the ReSt Endpoint to retrieve the relevant data. Pagination for the list of persons and connections could also help in case of an increasing amount of data.
 ReST provides a format, which can easily be adapted by other Clients, also the mobile devices, to send and receive data.
 
 2. gRPC

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+message PersonMessage {
+  int64 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string company_name = 4;
+}
+
+message Empty {
+}
+
+message ID {
+  int64 id = 1;
+}
+
+message Paged {
+  int64 start = 1;
+  int64 amount = 2;
+}
+
+message PersonMessageList {
+  repeated PersonMessage persons = 1;
+}
+
+service AllPersonService {
+    rpc Get(Empty) returns (PersonMessageList);
+}
+
+service PersonByIdService {
+  rpc Get(ID) returns (PersonMessage);
+}
+
+service PersonPagedService {
+  rpc Get(Paged) returns (PersonMessageList);
+}
