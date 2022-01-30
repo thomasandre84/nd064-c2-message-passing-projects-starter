@@ -1,12 +1,9 @@
 from __future__ import annotations
 
+
 from app import db  # noqa
-from geoalchemy2 import Geometry
-from geoalchemy2.shape import to_shape
-from shapely.geometry.point import Point
-from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy import  Column, Integer, String
+
 
 
 class Person(db.Model):
@@ -16,4 +13,3 @@ class Person(db.Model):
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     company_name = Column(String, nullable=False)
-
