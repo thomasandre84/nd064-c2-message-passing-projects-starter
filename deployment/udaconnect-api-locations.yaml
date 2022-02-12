@@ -6,7 +6,7 @@ metadata:
   name: udaconnect-api-locations
 spec:
   ports:
-  - name: "5000"
+  - name: "http"
     port: 5000
     targetPort: 5000
     nodePort: 30003

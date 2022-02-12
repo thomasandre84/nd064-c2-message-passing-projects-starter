@@ -6,9 +6,12 @@ metadata:
   name: udaconnect-service-locations
 spec:
   ports:
-  - name: "5000"
+  - name: "http"
     port: 5000
     targetPort: 5000
+  - name: "grpc"
+    port: 5005
+    targetPort: 5005
   selector:
     service: udaconnect-service-locations
   type: ClusterIP

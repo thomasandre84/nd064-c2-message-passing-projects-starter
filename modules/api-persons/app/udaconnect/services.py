@@ -15,7 +15,7 @@ logger = logging.getLogger("udaconnect-api-persons")
 TOPIC_NAME = 'persons'
 KAFKA_SERVER = os.getenv("KAFKA_SERVER") if os.getenv("KAFKA_SERVER") is not None else 'localhost:9092'
 
-GRPC_CHANNEL = os.getenv('GRPC_CHANNEL') if os.getenv('GRPC_CHANNEL') is not None else 'localhost:5005'
+GRPC_CHANNEL = os.getenv('PERSON_SERVICE')+":5005" if os.getenv('PERSON_SERVICE') is not None else 'localhost:5005'
 
 
 class PersonService:

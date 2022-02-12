@@ -6,9 +6,12 @@ metadata:
   name: udaconnect-service-persons
 spec:
   ports:
-  - name: "5000"
+  - name: "http"
     port: 5000
     targetPort: 5000
+  - name: "grpc"
+    port: 5005
+    targetPort: 5005
   selector:
     service: udaconnect-service-persons
   type: ClusterIP
@@ -59,4 +62,9 @@ spec:
             configMapKeyRef:
               name: db-env
               key: DB_PORT
+        - name: KAFKA_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: message-env
+              key: KAFKA_SERVER
       restartPolicy: Always

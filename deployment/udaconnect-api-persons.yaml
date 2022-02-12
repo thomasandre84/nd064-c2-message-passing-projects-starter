@@ -6,7 +6,7 @@ metadata:
   name: udaconnect-api-persons
 spec:
   ports:
-  - name: "5000"
+  - name: "http"
     port: 5000
     targetPort: 5000
     nodePort: 30002
@@ -34,4 +34,15 @@ spec:
       - image: thomasandre/nd064-udaconnect-api-persons:latest
         name: udaconnect-api-persons
         imagePullPolicy: Always
+        env:
+        - name: KAFKA_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: message-env
+              key: KAFKA_SERVER
+        - name: PERSON_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: message-env
+              key: PERSON_SERVICE
       restartPolicy: Always
