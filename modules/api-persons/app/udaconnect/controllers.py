@@ -1,4 +1,4 @@
-from app.udaconnect.schemas import PersonSchema
+from app.udaconnect.schemas import PersonSchema, PersonsPaged
 from app.udaconnect.services import PersonService
 from flask import request, g, Response
 from flask_accepts import accepts, responds
@@ -32,4 +32,14 @@ class PersonResource(Resource):
     def get(self, person_id) -> PersonSchema:
         person: PersonSchema = PersonService.retrieve(person_id)
         return person
+
+
+@api.route("/persons/page/<start>/<amount>")
+@api.param("start", "Unique ID for a given Person", _in="query")
+@api.param("amount", "Unique ID for a given Person", _in="query")
+class PersonResource(Resource):
+    @responds(schema=PersonsPaged)
+    def get(self, person_id) -> PersonSchema:
+        page: PersonsPaged = PersonService.retrieve(person_id)
+        return page
 

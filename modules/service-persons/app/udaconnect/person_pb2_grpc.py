@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import app.udaconnect.person_pb2 as person__pb2
+import person_pb2 as person__pb2
 
 
 class PersonServiceStub(object):
@@ -27,7 +27,7 @@ class PersonServiceStub(object):
         self.GetPaged = channel.unary_unary(
                 '/PersonService/GetPaged',
                 request_serializer=person__pb2.Paged.SerializeToString,
-                response_deserializer=person__pb2.PersonMessageList.FromString,
+                response_deserializer=person__pb2.PagedPersonMessageList.FromString,
                 )
 
 
@@ -68,7 +68,7 @@ def add_PersonServiceServicer_to_server(servicer, server):
             'GetPaged': grpc.unary_unary_rpc_method_handler(
                     servicer.GetPaged,
                     request_deserializer=person__pb2.Paged.FromString,
-                    response_serializer=person__pb2.PersonMessageList.SerializeToString,
+                    response_serializer=person__pb2.PagedPersonMessageList.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -127,6 +127,6 @@ class PersonService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/PersonService/GetPaged',
             person__pb2.Paged.SerializeToString,
-            person__pb2.PersonMessageList.FromString,
+            person__pb2.PagedPersonMessageList.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

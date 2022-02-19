@@ -4,7 +4,7 @@ from json import dumps
 import os
 from kafka import KafkaProducer
 
-from app.udaconnect.schemas import PersonSchema
+from app.udaconnect.schemas import PersonSchema, PersonsPaged
 import grpc
 import app.udaconnect.person_pb2_grpc as person_pb2_grpc
 import app.udaconnect.person_pb2 as person_pb2
@@ -41,8 +41,10 @@ class PersonService:
             id=person_id
         )
         response = PersonService._stub.GetById(id_message)
-        print(response)
-        return None
+        #print(response)
+        schema = PersonSchema()
+        person = schema.dump(response)
+        return person
 
     @staticmethod
     def retrieve_all() -> List[PersonSchema]:
@@ -51,7 +53,7 @@ class PersonService:
         return None
 
     @staticmethod
-    def retrieve_paged(start: int, amount: int) -> List[PersonSchema]:
+    def retrieve_page(start: int, amount: int) -> PersonsPaged:
         page_message = person_pb2.Paged(
             start=start,
             amount=amount

@@ -23,8 +23,14 @@ message PersonMessageList {
   repeated PersonMessage persons = 1;
 }
 
+message PagedPersonMessageList {
+  int32 page = 1;
+  int32 pages = 2;
+  repeated PersonMessage persons = 3;
+}
+
 service PersonService {
     rpc GetAll(Empty) returns (PersonMessageList);
     rpc GetById(ID) returns (PersonMessage);
-    rpc GetPaged(Paged) returns (PersonMessageList);
+    rpc GetPaged(Paged) returns (PagedPersonMessageList);
 }

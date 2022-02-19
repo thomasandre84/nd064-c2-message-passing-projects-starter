@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0cperson.proto\"X\n\rPersonMessage\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x14\n\x0c\x63ompany_name\x18\x04 \x01(\t\"\x07\n\x05\x45mpty\"\x10\n\x02ID\x12\n\n\x02id\x18\x01 \x01(\x03\"&\n\x05Paged\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x03\"4\n\x11PersonMessageList\x12\x1f\n\x07persons\x18\x01 \x03(\x0b\x32\x0e.PersonMessage2}\n\rPersonService\x12$\n\x06GetAll\x12\x06.Empty\x1a\x12.PersonMessageList\x12\x1e\n\x07GetById\x12\x03.ID\x1a\x0e.PersonMessage\x12&\n\x08GetPaged\x12\x06.Paged\x1a\x12.PersonMessageListb\x06proto3'
+  serialized_pb=b'\n\x0cperson.proto\"X\n\rPersonMessage\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x12\n\nfirst_name\x18\x02 \x01(\t\x12\x11\n\tlast_name\x18\x03 \x01(\t\x12\x14\n\x0c\x63ompany_name\x18\x04 \x01(\t\"\x07\n\x05\x45mpty\"\x10\n\x02ID\x12\n\n\x02id\x18\x01 \x01(\x03\"&\n\x05Paged\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x03\"4\n\x11PersonMessageList\x12\x1f\n\x07persons\x18\x01 \x03(\x0b\x32\x0e.PersonMessage\"V\n\x16PagedPersonMessageList\x12\x0c\n\x04page\x18\x01 \x01(\x05\x12\r\n\x05pages\x18\x02 \x01(\x05\x12\x1f\n\x07persons\x18\x03 \x03(\x0b\x32\x0e.PersonMessage2\x82\x01\n\rPersonService\x12$\n\x06GetAll\x12\x06.Empty\x1a\x12.PersonMessageList\x12\x1e\n\x07GetById\x12\x03.ID\x1a\x0e.PersonMessage\x12+\n\x08GetPaged\x12\x06.Paged\x1a\x17.PagedPersonMessageListb\x06proto3'
 )
 
 
@@ -205,12 +205,60 @@ _PERSONMESSAGELIST = _descriptor.Descriptor(
   serialized_end=225,
 )
 
+
+_PAGEDPERSONMESSAGELIST = _descriptor.Descriptor(
+  name='PagedPersonMessageList',
+  full_name='PagedPersonMessageList',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='page', full_name='PagedPersonMessageList.page', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pages', full_name='PagedPersonMessageList.pages', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='persons', full_name='PagedPersonMessageList.persons', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=227,
+  serialized_end=313,
+)
+
 _PERSONMESSAGELIST.fields_by_name['persons'].message_type = _PERSONMESSAGE
+_PAGEDPERSONMESSAGELIST.fields_by_name['persons'].message_type = _PERSONMESSAGE
 DESCRIPTOR.message_types_by_name['PersonMessage'] = _PERSONMESSAGE
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['ID'] = _ID
 DESCRIPTOR.message_types_by_name['Paged'] = _PAGED
 DESCRIPTOR.message_types_by_name['PersonMessageList'] = _PERSONMESSAGELIST
+DESCRIPTOR.message_types_by_name['PagedPersonMessageList'] = _PAGEDPERSONMESSAGELIST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 PersonMessage = _reflection.GeneratedProtocolMessageType('PersonMessage', (_message.Message,), {
@@ -248,6 +296,13 @@ PersonMessageList = _reflection.GeneratedProtocolMessageType('PersonMessageList'
   })
 _sym_db.RegisterMessage(PersonMessageList)
 
+PagedPersonMessageList = _reflection.GeneratedProtocolMessageType('PagedPersonMessageList', (_message.Message,), {
+  'DESCRIPTOR' : _PAGEDPERSONMESSAGELIST,
+  '__module__' : 'person_pb2'
+  # @@protoc_insertion_point(class_scope:PagedPersonMessageList)
+  })
+_sym_db.RegisterMessage(PagedPersonMessageList)
+
 
 
 _PERSONSERVICE = _descriptor.ServiceDescriptor(
@@ -257,8 +312,8 @@ _PERSONSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=227,
-  serialized_end=352,
+  serialized_start=316,
+  serialized_end=446,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetAll',
@@ -286,7 +341,7 @@ _PERSONSERVICE = _descriptor.ServiceDescriptor(
     index=2,
     containing_service=None,
     input_type=_PAGED,
-    output_type=_PERSONMESSAGELIST,
+    output_type=_PAGEDPERSONMESSAGELIST,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),
