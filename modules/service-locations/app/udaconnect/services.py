@@ -9,14 +9,15 @@ from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchem
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 import app.udaconnect.location_pb2_grpc as location_pb2_grpc
+import app.udaconnect.location_pb2 as location_pb2
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
 
 
 class GrpcLocationService(location_pb2_grpc.LocationServiceServicer):
-    @staticmethod
-    def retrieve(location_id) -> Location:
+
+    def GetById(self, location_id):
         location, coord_text = (
             db.session.query(Location, Location.coordinate.ST_AsText())
             .filter(Location.id == location_id)
@@ -25,7 +26,20 @@ class GrpcLocationService(location_pb2_grpc.LocationServiceServicer):
 
         # Rely on database to return text form of point to reduce overhead of conversion in app code
         location.wkt_shape = coord_text
-        return location
+        result = location_pb2.LocationMessage(**location)
+        return result
+
+    def GetByPersonId(self, person_id):
+        location, coord_text = (
+            db.session.query(Location, Location.coordinate.ST_AsText())
+                .filter(Location.person_id == person_id)
+                .one()
+        )
+
+        # Rely on database to return text form of point to reduce overhead of conversion in app code
+        location.wkt_shape = coord_text
+        result = location_pb2.LocationMessage(**location)
+        return result
 
 
 class KafkaLocationService:
