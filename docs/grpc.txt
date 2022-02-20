@@ -1,0 +1,37 @@
+# GRPC Endpoints
+The GRPC Endpoints are only available in the backend applications.
+
+The Controllers can request the services to transfer the data binary.
+
+The proto-files are attached.
+
+The api deployments request the Endpoints. Example:
+```
+    _channel = grpc.insecure_channel(GRPC_CHANNEL)
+    _stub = person_pb2_grpc.PersonServiceStub(channel=_channel)
+
+    @staticmethod
+    def retrieve(person_id: int) -> PersonSchema:
+        # person = db.session.query(Person).get(person_id)
+        id_message = person_pb2.ID(
+            id=person_id
+        )
+        response = PersonService._stub.GetById(id_message)
+        # print(response)
+        schema = PersonSchema()
+        person = schema.dump(response)
+        return person
+```
+
+The stup is instantiated with the correct channel:
+```
+_channel = grpc.insecure_channel(GRPC_CHANNEL)
+    _stub = person_pb2_grpc.PersonServiceStub(channel=_channel)
+```
+A Request Message is created and the stup is used:
+```
+        id_message = person_pb2.ID(
+            id=person_id
+        )
+        response = PersonService._stub.GetById(id_message)
+```

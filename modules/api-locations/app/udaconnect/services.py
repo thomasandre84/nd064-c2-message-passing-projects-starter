@@ -17,7 +17,7 @@ from kafka import KafkaProducer
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api-locations")
 
-TOPIC_NAME = 'persons'
+TOPIC_NAME = 'locations'
 KAFKA_SERVER = os.getenv("KAFKA_SERVER") if os.getenv("KAFKA_SERVER") is not None else 'localhost:9092'
 
 GRPC_CHANNEL = os.getenv('LOCATION_SERVICE')+":5005" if os.getenv('LOCATION_SERVICE') is not None else 'localhost:5005'

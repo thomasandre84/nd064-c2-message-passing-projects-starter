@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 import grpc
 from concurrent import futures
@@ -13,11 +14,12 @@ import signal
 from flask_kafka import FlaskKafka
 
 db = SQLAlchemy()
+KAFKA_SERVER = os.getenv('KAFKA_SERVER') if os.getenv('KAFKA_SERVER') is not None else '127.0.0.1:9092'
 
 INTERRUPT_EVENT = Event()
 
 bus = FlaskKafka(INTERRUPT_EVENT,
-                 bootstrap_servers=",".join(["localhost:9092"]),
+                 bootstrap_servers=",".join([KAFKA_SERVER]),
                  group_id="consumer-persons"
                  )
 

@@ -62,4 +62,9 @@ spec:
             configMapKeyRef:
               name: db-env
               key: DB_PORT
+        - name: KAFKA_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: message-env
+              key: KAFKA_SERVER
       restartPolicy: Always

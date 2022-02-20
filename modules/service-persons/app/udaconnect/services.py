@@ -8,9 +8,6 @@ from app.udaconnect.models import Person
 import app.udaconnect.person_pb2_grpc as person_pb2_grpc
 import app.udaconnect.person_pb2 as person_pb2
 
-TOPIC_NAME = 'persons'
-KAFKA_SERVER = os.getenv('KAFKA_SERVER') if os.getenv('KAFKA_SERVER') is not None else '127.0.0.1:9092'
-
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-person-service")
 

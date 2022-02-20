@@ -34,4 +34,15 @@ spec:
       - image: thomasandre/nd064-udaconnect-api-connections:latest
         name: udaconnect-api-connections
         imagePullPolicy: Always
+        env:
+        - name: PERSON_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: message-env
+              key: PERSON_SERVICE
+        - name: LOCATION_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: message-env
+              key: LOCATION_SERVICE
       restartPolicy: Always
