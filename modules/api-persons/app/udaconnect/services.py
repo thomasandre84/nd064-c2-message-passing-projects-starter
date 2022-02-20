@@ -15,13 +15,13 @@ logger = logging.getLogger("udaconnect-api-persons")
 TOPIC_NAME = 'persons'
 KAFKA_SERVER = os.getenv("KAFKA_SERVER") if os.getenv("KAFKA_SERVER") is not None else 'localhost:9092'
 
-GRPC_CHANNEL = os.getenv('PERSON_SERVICE')+":5005" if os.getenv('PERSON_SERVICE') is not None else 'localhost:5005'
+GRPC_CHANNEL = os.getenv('PERSON_SERVICE') + ":5005" if os.getenv('PERSON_SERVICE') is not None else 'localhost:5005'
 
 
 class PersonService:
     _producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER,
-                                 value_serializer=lambda x:
-                                 dumps(x).encode('utf-8'))
+                              value_serializer=lambda x:
+                              dumps(x).encode('utf-8'))
 
     _channel = grpc.insecure_channel(GRPC_CHANNEL)
     _stub = person_pb2_grpc.PersonServiceStub(channel=_channel)
@@ -36,12 +36,12 @@ class PersonService:
 
     @staticmethod
     def retrieve(person_id: int) -> PersonSchema:
-        #person = db.session.query(Person).get(person_id)
+        # person = db.session.query(Person).get(person_id)
         id_message = person_pb2.ID(
             id=person_id
         )
         response = PersonService._stub.GetById(id_message)
-        #print(response)
+        # print(response)
         schema = PersonSchema()
         person = schema.dump(response)
         return person
@@ -49,8 +49,11 @@ class PersonService:
     @staticmethod
     def retrieve_all() -> List[PersonSchema]:
         response = PersonService._stub.GetAll(person_pb2.Empty())
-        print(response)
-        return None
+        schema = PersonSchema()
+        persons = list()
+        for person in response.persons:
+            persons.append(schema.dump(person))
+        return persons
 
     @staticmethod
     def retrieve_page(start: int, amount: int) -> PersonsPaged:
@@ -59,5 +62,17 @@ class PersonService:
             amount=amount
         )
         response = PersonService._stub.GetPaged(page_message)
-        print(response)
-        return None
+        page = response.page
+        pages = response.pages
+        schema = PersonSchema()
+        persons = list()
+        for person in response.persons:
+            persons.append(schema.dump(persons))
+
+        pages_dict = dict()
+        pages_dict['page'] = page
+        pages_dict['pages'] = pages
+        pages_dict['persons'] = persons
+        schema_paged = PersonsPaged()
+        persons_paged = schema_paged.dump(pages_dict)
+        return persons_paged

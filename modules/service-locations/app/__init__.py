@@ -1,16 +1,17 @@
+import grpc
+from concurrent import futures
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 
-import grpc
-from concurrent import futures
-import app.udaconnect.person_pb2_grpc as person_pb2_grpc
+
 
 from threading import Event
 import signal
 
 from flask_kafka import FlaskKafka
+
 
 db = SQLAlchemy()
 
@@ -18,7 +19,7 @@ INTERRUPT_EVENT = Event()
 
 bus = FlaskKafka(INTERRUPT_EVENT,
                  bootstrap_servers=",".join(["localhost:9092"]),
-                 group_id="consumer-persons"
+                 group_id="consumer-locations"
                  )
 
 
@@ -29,20 +30,21 @@ def listen_kill_server():
     signal.signal(signal.SIGHUP, bus.interrupted_process)
 
 
-@bus.handle('persons')
+@bus.handle('locations')
 def persons_topic_handler(msg):
     #print("consumed {} from persons-topic".format(msg))
-    from app.udaconnect.services import KafkaPersonService
-    KafkaPersonService.consumePersons(msg)
+    from app.udaconnect.services import KafkaLocationService
+    KafkaLocationService.consumeLocations(msg)
 
 
 def create_app(env=None):
     from app.config import config_by_name
-    from app.udaconnect.services import GrpcPersonService
+    from app.udaconnect.services import GrpcLocationService
+    import app.udaconnect.location_pb2_grpc as location_pb2_grpc
 
     app = Flask(__name__)
     app.config.from_object(config_by_name[env or "test"])
-    api = Api(app, title="UdaConnect Person Service", version="0.1.0")
+    api = Api(app, title="UdaConnect Location Service", version="0.1.0")
 
     CORS(app)  # Set CORS for development
 
@@ -50,18 +52,14 @@ def create_app(env=None):
 
     # Initialize gRPC server
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
-    person_pb2_grpc.add_PersonServiceServicer_to_server(GrpcPersonService(), server)
+    location_pb2_grpc.add_LocationServiceServicer_to_server(GrpcLocationService(), server)
 
     print("Server starting on port 5005...")
     server.add_insecure_port("[::]:5005")
     server.start()
 
-
     @app.route("/health")
     def health():
         return jsonify("healthy")
-
-    bus.run()
-    listen_kill_server()
 
     return app
