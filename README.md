@@ -20,6 +20,7 @@ To do so, ***you will refactor this application into a microservice architecture
 * [K3s](https://k3s.io/) - Lightweight distribution of K8s to easily develop against a local cluster
 * [Kafka](https://kafka.apache.org/) - Distributed Streaming Platform
 * [Strimzi](https://strimzi.io/) - Kafka for Kubernetes
+* [Flask Kafka](https://pypi.org/project/flask-kafka/) - Kafka Wrapper for Flask to consume messages - remark: a KafkaConsumer is instantiated a different way with this dependency - see documentation
 
 ## Running the app
 The project has been set up such that you should be able to have the project up and running with Kubernetes.
@@ -83,9 +84,13 @@ Afterwards, you can test that `kubectl` works by running a command like `kubectl
 3. `kubectl apply -f deployment/postgres.yaml` - Set up a Postgres database running PostGIS
 4. `kubectl create -f 'https://strimzi.io/install/latest?namespace=default'` - Set up Strimzi Cluster Operator for Kafka
 5. `kubectl apply -f deployment/kafka.yaml` - Set up Kafka
-6. `kubectl apply -f deployment/udaconnect-api.yaml` - Set up the service and deployment for the API
-7. `kubectl apply -f deployment/udaconnect-app.yaml` - Set up the service and deployment for the web app
-8. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
+6. `kubectl apply -f deployment/udaconnect-service-locations.yaml` - Set up the service and deployment for handling Location data
+7. `kubectl apply -f deployment/udaconnect-service-persons.yaml` - Set up the service and deployment for handling Person data
+8. `kubectl apply -f deployment/udaconnect-api-locations.yaml` - Set up the service and deployment for the API of locations
+9. `kubectl apply -f deployment/udaconnect-api-persons.yaml` - Set up the service and deployment for the API of persons
+10. `kubectl apply -f deployment/udaconnect-api-connections.yaml` - Set up the service and deployment for the API of connections between persons dependng on their locations and time
+11. `kubectl apply -f deployment/udaconnect-app.yaml` - Set up the service and deployment for the web app
+12. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
 
 Manually applying each of the individual `yaml` files is cumbersome but going through each step provides some context on the content of the starter project. In practice, we would have reduced the number of steps by running the command against a directory to apply of the contents: `kubectl apply -f deployment/`.
 
@@ -97,8 +102,12 @@ Once the project is up and running, you should be able to see 3 deployments and 
 
 
 These pages should also load on your web browser:
-* `http://localhost:30001/` - OpenAPI Documentation
-* `http://localhost:30001/api/` - Base path for API
+* `http://localhost:30002/` - OpenAPI Documentation Persons API
+* `http://localhost:30002/api/` - Base path for API Persons
+* `http://localhost:30003/` - OpenAPI Documentation Locationss API
+* `http://localhost:30003/api/` - Base path for API Locations
+* `http://localhost:30004/` - OpenAPI Documentation Connection API
+* `http://localhost:30004/api/` - Base path for API Connections
 * `http://localhost:30000/` - Frontend ReactJS Application
 
 #### Deployment Note
