@@ -17,10 +17,10 @@ logger = logging.getLogger("udaconnect-api")
 
 class GrpcLocationService(location_pb2_grpc.LocationServiceServicer):
 
-    def GetById(self, location_id):
+    def GetById(self, request, context):
         location, coord_text = (
             db.session.query(Location, Location.coordinate.ST_AsText())
-            .filter(Location.id == location_id)
+            .filter(Location.id == request.id)
             .one()
         )
 
@@ -29,10 +29,10 @@ class GrpcLocationService(location_pb2_grpc.LocationServiceServicer):
         result = location_pb2.LocationMessage(**location)
         return result
 
-    def GetByPersonId(self, person_id):
+    def GetByPersonId(self, request, context):
         location, coord_text = (
             db.session.query(Location, Location.coordinate.ST_AsText())
-                .filter(Location.person_id == person_id)
+                .filter(Location.person_id == request.id)
                 .one()
         )
 

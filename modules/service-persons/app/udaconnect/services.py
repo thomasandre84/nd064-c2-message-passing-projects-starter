@@ -28,8 +28,8 @@ class KafkaPersonService:
 
 class GrpcPersonService(person_pb2_grpc.PersonServiceServicer):
 
-    def GetById(self, person_id: int):
-        person = db.session.query(Person).get(person_id)
+    def GetById(self, request, context):
+        person = db.session.query(Person).get(request.id)
         person_grpc = person_pb2.PersonMessage(
             id=person.id,
             first_name=person.first_name,
@@ -38,7 +38,7 @@ class GrpcPersonService(person_pb2_grpc.PersonServiceServicer):
         )
         return person_grpc
 
-    def GetAll(self):
+    def GetAll(self, request, context):
         persons = db.session.query(Person).all()
         result = person_pb2.PersonMessageList()
         for person in persons:
@@ -52,11 +52,11 @@ class GrpcPersonService(person_pb2_grpc.PersonServiceServicer):
 
         return result
 
-    def GetPaged(self, start: int, amount: int):
-        persons = db.session.query(Person).order_by(Person.id).offset(start).yield_per(amount)
+    def GetPaged(self, request, context):
+        persons = db.session.query(Person).order_by(Person.id).offset(request.start).yield_per(request.amount)
         count = db.session.query(Person).count()
-        pages = count / amount + 1
-        page = start / amount + 1
+        pages = count / request.amount + 1
+        page = request.start / request.amount + 1
         persons_grpc = person_pb2.PersonMessageList()
         for person in persons:
             person_grpc = person_pb2.PersonMessage(
